@@ -1,5 +1,6 @@
 package de.unikoblenz.west.koldfish.crawler.impl;
 
+import org.apache.jena.iri.IRI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,11 +53,13 @@ public class CrawlConsumerImpl implements CrawlConsumer {
 	
 	@Override
 	public void start() throws Exception {
+		log.debug("start");
 		t.start();
 	}
 
 	@Override
 	public void terminate() throws Exception {
+		log.debug("terminate");
 		queue.add(new CrawlPoison());
 	}
 	
@@ -69,8 +72,9 @@ public class CrawlConsumerImpl implements CrawlConsumer {
 
 			@Override
 			public void run() {
+				log.debug("consumer running");
 				try {
-					while(true) {
+					while(!Thread.currentThread().isInterrupted()) {
 						// wait if nice crawl
 						if(niceCrawl) {
 							synchronized(t) {
@@ -94,7 +98,9 @@ public class CrawlConsumerImpl implements CrawlConsumer {
 						// else deref IRI.
 						else if (msg instanceof CrawlIri) {
 							try {
-								ctrl.derefAsync(((CrawlIri) msg).getIRI());
+								IRI iri = ((CrawlIri) msg).getIRI();
+								log.debug("access: " + iri);
+								ctrl.derefAsync(iri);
 							} catch (ControllerException e) {
 								log.error(e.toString(),e);
 							}
@@ -103,6 +109,8 @@ public class CrawlConsumerImpl implements CrawlConsumer {
 				} catch (InterruptedException e) {
 					log.error(e.toString(),e);
 				}
+				
+				log.debug("consumer done");
 			}
 			
 		};
