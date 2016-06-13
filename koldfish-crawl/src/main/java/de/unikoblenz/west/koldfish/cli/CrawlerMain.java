@@ -53,7 +53,10 @@ public class CrawlerMain {
 		//To do choose different frontier if there based by options
 		for (Long l: seeds)
 			frontier.add(l);
+		 Crawler c = new Crawler();
+		 c.evaluateList(frontier);
 	}
+	
 	
 
 	private static Iterable<Long> prepareSeedsIterable(File seedList) {
