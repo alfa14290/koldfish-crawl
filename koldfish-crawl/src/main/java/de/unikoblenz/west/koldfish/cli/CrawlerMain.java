@@ -1,5 +1,9 @@
 package de.unikoblenz.west.koldfish.cli;
 import de.unikoblenz.west.koldfish.frontier.*;
+import de.unikoblenz.west.koldfish.queue.SpiderQueue;
+import de.unikoblenz.west.koldfish.seen.Seen;
+import de.unikoblenz.west.koldfish.seen.Seen_Queue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,7 +19,8 @@ import org.apache.commons.cli.Options;
 
 
 public class CrawlerMain {
-
+	
+    
 	public static void main(String[] args) throws Exception {
 		Options opts = new Options();
 		// Take command line orguments for seed file and output file
@@ -53,8 +58,13 @@ public class CrawlerMain {
 		//To do choose different frontier if there based by options
 		for (Long l: seeds)
 			frontier.add(l);
-		 Crawler c = new Crawler();
-		 c.evaluateList(frontier);
+		// TO do : Move schedule to a different thread and seen will be common
+		Seen _seen= new Seen_Queue();		
+		SpiderQueue q = new SpiderQueue(_seen);
+		q.schedule(frontier);
+		 Crawler c = new Crawler(q);
+		 c.evaluateList();
+		
 	}
 	
 	

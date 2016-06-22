@@ -14,9 +14,6 @@ public class Seen_Queue implements Seen {
 		_set = Collections.synchronizedSet(new HashSet<Long>());
 	}
 
-	public boolean hasBeenSeen(URI u) {
-		return _set.contains(u);
-	}
 
 	
 	public void clear() {
