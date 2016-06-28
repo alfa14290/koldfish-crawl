@@ -62,7 +62,7 @@ public class CrawlerMain {
 		Seen _seen= new Seen_Queue();		
 		SpiderQueue q = new SpiderQueue(_seen);
 		q.schedule(frontier);
-		 Crawler c = new Crawler(q);
+		 Crawler c = new Crawler(q, frontier, _seen);
 		 c.evaluateList();
 		
 	}

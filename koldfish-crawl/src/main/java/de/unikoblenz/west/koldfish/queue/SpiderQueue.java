@@ -22,7 +22,7 @@ public class SpiderQueue {
 	}
 
 	// put Longs from frontier to queue
-	 //use synchronized for thread safety
+	// use synchronized for thread safety!!!--needs to check
 	public void schedule(Frontier f) {
 		Iterator<Long> it = f.iterator();
 
@@ -35,43 +35,34 @@ public class SpiderQueue {
 
 		}
 	}
-   //use synchronized for thread safety
-	public Long spiderPoll() throws Exception  {
+
+	// use synchronized for thread safety!!!--needs to check
+	public Long spiderPoll() throws Exception {
 		if (q == null) {
-			//return null;
+			// return null;
 			throw new Exception("Queue not intialized");
-			}
+		}
 
 		Long next = null;
 
 		int empty = 0;
-		//do {
-		
-			while (!q.isEmpty()) {
-				next = q.poll();
 
-				if (!checkSeen(next)) {
-					setSeen(next);
-					return next;
-				}
-				
-				
-				
-				
-				
-				//else {
-					//setSeen(next);
-				//}
-		//	} else {
-			//	empty++;
+		while (!q.isEmpty()) {
+			next = q.poll();
+
+			if (!checkSeen(next)) {
+				setSeen(next);
+				return next;
 			}
-		//} while (next == null && empty < q.size());
+
+		}
+
 		return next;
 
 	}
-
+    // adding to queue by checking if this is not seen
 	private void add(Long l, boolean Processed) {
-		
+
 		if (!Processed) {
 			if (q == null) {
 				q = new ConcurrentLinkedQueue<Long>();
@@ -80,7 +71,8 @@ public class SpiderQueue {
 			q.add(l);
 		}
 	}
-
+    // check from seen if this long value has seen or not 
+	//retrun true if its seen
 	private boolean checkSeen(Long l) {
 		if (l == null) {
 			throw new NullPointerException("l cannot be null");
@@ -94,7 +86,7 @@ public class SpiderQueue {
 			_seen.add(l);
 
 	}
-
+   // setting to seen in the Seen set with the help of addSeen
 	void setSeen(long l) {
 		addSeen(l);
 	}

@@ -11,6 +11,7 @@ public interface Seen {
 
 	
 	public boolean add(Long l);
+	public boolean remove(Long l);
 
 }
 
