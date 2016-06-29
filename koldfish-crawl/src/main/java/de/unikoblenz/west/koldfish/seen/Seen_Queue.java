@@ -1,6 +1,5 @@
 package de.unikoblenz.west.koldfish.seen;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;

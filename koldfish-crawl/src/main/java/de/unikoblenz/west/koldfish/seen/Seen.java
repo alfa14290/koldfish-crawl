@@ -1,6 +1,5 @@
 package de.unikoblenz.west.koldfish.seen;
 
-import java.net.URI;
 import java.util.Collection;
 
 public interface Seen {

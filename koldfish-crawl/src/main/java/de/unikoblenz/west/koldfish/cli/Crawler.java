@@ -1,12 +1,6 @@
 package de.unikoblenz.west.koldfish.cli;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import de.unikoblenz.west.koldfish.dam.DataAccessModule;
 import de.unikoblenz.west.koldfish.dam.DataAccessModuleListener;
 import de.unikoblenz.west.koldfish.dam.ErrorResponse;
@@ -38,7 +32,7 @@ public class Crawler {
 			// List<Long[]> data = new LinkedList<Long[]>();
 			Frontier f2 = new BasicFrontier();
 			DataAccessModuleListener listener = new DataAccessModuleListener() {
-                // removing the Long value from seen if there is error
+				// removing the Long value from seen if there is error
 				public void onErrorResponse(ErrorResponse response) {
 					_seen.remove(new Long(response.getEncodedDerefIri()));
 
@@ -50,9 +44,10 @@ public class Crawler {
 
 					while (it.hasNext()) {
 						// data.addAll( it.next());
+						
 						// store directly in object instead of list of long
 						f2.addAll(it.next());
-						// Arrays.stream(it.next()).boxed()
+						
 					}
 
 				}

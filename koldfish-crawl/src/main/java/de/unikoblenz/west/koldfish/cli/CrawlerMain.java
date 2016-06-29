@@ -7,9 +7,6 @@ import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Paths;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;

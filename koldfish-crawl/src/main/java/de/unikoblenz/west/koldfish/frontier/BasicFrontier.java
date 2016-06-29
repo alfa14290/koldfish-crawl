@@ -1,12 +1,10 @@
 package de.unikoblenz.west.koldfish.frontier;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 
 public class BasicFrontier extends Frontier {
 	Set<Long> _data;
@@ -19,19 +17,21 @@ public class BasicFrontier extends Frontier {
 	public Iterator<Long> iterator() {
 		return _data.iterator();
 	}
-   
-	/* (non-Javadoc)
-	 * overloaded: for Merging the frontier objects
+
+	/*
+	 * (non-Javadoc) overloaded: for Merging the frontier objects
 	 */
 	public void addAll(Frontier f) {
 		this._data.addAll(f.getData());
 	}
-    
-	//public void addAll(Long[] c) {
-		//Collections.addAll(this._data, c);
-	//}
-	/* (non-Javadoc)
-	 * overloaded: Directly adding the long[] to frontier objects instead of using list
+
+	// public void addAll(Long[] c) {
+	// Collections.addAll(this._data, c);
+	// }
+	
+	/*
+	 * (non-Javadoc) overloaded: Directly adding the long[] to frontier objects
+	 * instead of using list
 	 */
 	public void addAll(long[] data) {
 		for (long value : data) {
@@ -58,9 +58,13 @@ public class BasicFrontier extends Frontier {
 
 	}
 
+	public boolean remove(Long val) {
+		return this._data.remove(val);
+	}
+
 	public void removeAll(Collection<Long> c) {
 		_data.removeAll(c);
 
 	}
-
+	
 }

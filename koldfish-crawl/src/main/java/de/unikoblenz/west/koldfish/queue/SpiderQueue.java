@@ -1,8 +1,5 @@
 package de.unikoblenz.west.koldfish.queue;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -32,6 +29,7 @@ public class SpiderQueue {
 				add(l, true);
 
 			}
+			it.remove();
 
 		}
 	}
@@ -45,7 +43,7 @@ public class SpiderQueue {
 
 		Long next = null;
 
-		int empty = 0;
+		//int empty = 0;
 
 		while (!q.isEmpty()) {
 			next = q.poll();
