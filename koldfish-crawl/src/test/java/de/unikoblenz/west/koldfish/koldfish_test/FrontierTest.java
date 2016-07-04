@@ -1,13 +1,10 @@
 package de.unikoblenz.west.koldfish.koldfish_test;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import de.unikoblenz.west.koldfish.frontier.BasicFrontier;
 import de.unikoblenz.west.koldfish.frontier.Frontier;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 
 public class FrontierTest extends TestCase {
