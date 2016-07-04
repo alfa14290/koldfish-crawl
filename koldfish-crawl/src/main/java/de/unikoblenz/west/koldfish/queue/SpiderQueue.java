@@ -59,12 +59,12 @@ public class SpiderQueue {
 
 	}
     // adding to queue by checking if this is not seen
-	private void add(Long l, boolean Processed) {
+	public void add(Long l, boolean Processed) {
 
 		if (!Processed) {
 			if (q == null) {
 				q = new ConcurrentLinkedQueue<Long>();
-				q.add(l);
+				//q.add(l);
 			}
 			q.add(l);
 		}
