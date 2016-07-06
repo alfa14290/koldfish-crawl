@@ -1,6 +1,9 @@
 package de.unikoblenz.west.koldfish.cli;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import de.unikoblenz.west.koldfish.dam.DataAccessModule;
 import de.unikoblenz.west.koldfish.dam.DataAccessModuleListener;
 import de.unikoblenz.west.koldfish.dam.ErrorResponse;
@@ -17,22 +20,26 @@ public class Crawler {
 	Frontier f1;
 	Seen _seen;
 
-	public Crawler(SpiderQueue q2, Frontier frontier, Seen _seen) {
-		this.q = q2;
+	public Crawler(SpiderQueue q, Frontier frontier, Seen _seen) {
+		this.q = q;
 		this.f1 = frontier;
 		this._seen = _seen;
 
 	}
 
+	/**
+	 * Poll the queue and implements the listner for the Dref Response. Add the
+	 * response to frontier Set
+	 */
 	public void evaluateList() {
 
 		try {
 			Long l = q.spiderPoll();
 			DataAccessModule dam = new JmsDataAccessModule();
-			// List<Long[]> data = new LinkedList<Long[]>();
+
 			Frontier f2 = new BasicFrontier();
 			DataAccessModuleListener listener = new DataAccessModuleListener() {
-				// removing the Long value from seen if there is error
+
 				public void onErrorResponse(ErrorResponse response) {
 					_seen.remove(new Long(response.getEncodedDerefIri()));
 
@@ -40,14 +47,10 @@ public class Crawler {
 
 				public void onDerefResponse(DerefResponse response) {
 					Iterator<long[]> it = response.iterator();
-					// f2.addAll(it);
 
 					while (it.hasNext()) {
-						// data.addAll( it.next());
-						
-						// store directly in object instead of list of long
 						f2.addAll(it.next());
-						
+
 					}
 
 				}
@@ -56,18 +59,7 @@ public class Crawler {
 			dam.deref(l.longValue());
 			this.f1.addAll(f2);
 
-			// Set<Long> set = new HashSet<>();
-
-			// for (Long[] values : data) {
-
-			// Collections.addAll(set, values);
-			// f2.addAll(Arrays.asList(values));
-			// f2.addAll(f1);
-
-			// }
-
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -18,7 +18,7 @@ public class FrontierTest extends TestCase {
 		frontier.add(new Long(url1));
 		frontier.add(new Long(url2));
         assertEquals(urlSet, frontier.getData());
-		System.out.println(frontier);
+		
 		
 
 	}

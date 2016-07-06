@@ -18,15 +18,19 @@ public class SpiderQueue {
 		q = new ConcurrentLinkedQueue<Long>();
 	}
 
-	// put Longs from frontier to queue
-	// use synchronized for thread safety!!!--needs to check
+	/**
+	 * put Longs from frontier to queue ToDo: make method synchronized for
+	 * thread safety!!!--needs to check
+	 * 
+	 * @param f
+	 */
 	public void schedule(Frontier f) {
 		Iterator<Long> it = f.iterator();
 
 		while (it.hasNext()) {
 			Long l = it.next();
 			if (!checkSeen(l)) {
-				add(l, true);
+				add(l, false);
 
 			}
 			it.remove();
@@ -34,43 +38,50 @@ public class SpiderQueue {
 		}
 	}
 
-	// use synchronized for thread safety!!!--needs to check
+	/**
+	 * 
+	 * @return the Long value for the dereference(de.unikoblenz.west.dam) ToDo:
+	 *         make method synchronized for thread safety!!!--needs to check
+	 * @throws Exception
+	 */
 	public Long spiderPoll() throws Exception {
 		if (q == null) {
-			// return null;
 			throw new Exception("Queue not intialized");
 		}
-
 		Long next = null;
-
-		//int empty = 0;
-
 		while (!q.isEmpty()) {
 			next = q.poll();
-
 			if (!checkSeen(next)) {
 				setSeen(next);
 				return next;
 			}
 
 		}
-
 		return next;
-
 	}
-    // adding to queue by checking if this is not seen
+
+	/**
+	 * Add the long value to the queue if its not added before
+	 * @param l
+	 * @param Processed
+	 */
 	public void add(Long l, boolean Processed) {
 
 		if (!Processed) {
 			if (q == null) {
 				q = new ConcurrentLinkedQueue<Long>();
-				//q.add(l);
 			}
 			q.add(l);
 		}
 	}
-    // check from seen if this long value has seen or not 
-	//retrun true if its seen
+
+	/**
+	 * check from seen if this long value has seen or
+	 * not(de.unikoblenz.west.koldfish.seen)
+	 * 
+	 * @param l
+	 * @return true if its seen
+	 */
 	private boolean checkSeen(Long l) {
 		if (l == null) {
 			throw new NullPointerException("l cannot be null");
@@ -79,12 +90,23 @@ public class SpiderQueue {
 		return _seen.hasBeenSeen(l);
 	}
 
+	/**
+	 * Add to Seen Set(de.unikoblenz.west.koldfish.seen)
+	 * 
+	 * @param l
+	 */
+
 	public void addSeen(Long l) {
 		if (l != null)
 			_seen.add(l);
 
 	}
-   // setting to seen in the Seen set with the help of addSeen
+
+	/**
+	 * Set the Long value to seen
+	 * 
+	 * @param l
+	 */
 	void setSeen(long l) {
 		addSeen(l);
 	}

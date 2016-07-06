@@ -1,19 +1,18 @@
 package de.unikoblenz.west.koldfish.koldfish_test;
 
-import java.util.Iterator;
 import de.unikoblenz.west.koldfish.frontier.BasicFrontier;
 import de.unikoblenz.west.koldfish.frontier.Frontier;
 import de.unikoblenz.west.koldfish.queue.SpiderQueue;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 import junit.framework.TestCase;
 
-public class SpiderQueueTest extends TestCase {
+public class SeenQueueTest extends TestCase {
+	
 	/**
-	 * checks the polling of SpiderQueue Through spiderPoll
+	 * checks seen at the pooling and scheduling
 	 * @throws Exception
 	 */
-
-	public void testQueue() throws Exception {
+	public void testSeen() throws Exception {
 
 		Frontier frontier = new BasicFrontier();
 		Seen_Queue s = new Seen_Queue();
@@ -29,19 +28,22 @@ public class SpiderQueueTest extends TestCase {
 		frontier.add(url1);
 		frontier.add(url3);
 		frontier.add(url2);
-		
+		frontier.remove(url1);
 		
 		
 		q.add(url1, false);
 		q.add(url2, false);
-		q.add(url3, true);
+		q.add(url3, false);
 
 		
-		assertEquals(q.spiderPoll(), url1);
-		assertEquals(q.spiderPoll(), url2);
-		assertEquals(q.spiderPoll(), url3);
+		
+		
+		assertFalse(q.getSeen().hasBeenSeen(url1));
+		assertFalse(q.getSeen().hasBeenSeen(url2));
+		assertTrue(q.getSeen().hasBeenSeen(url3));
 		
 		
 
 	}
+
 }
