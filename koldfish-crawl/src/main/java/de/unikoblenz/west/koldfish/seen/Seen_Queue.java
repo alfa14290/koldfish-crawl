@@ -12,7 +12,7 @@ public class Seen_Queue implements Seen {
 	public Seen_Queue() {
 		_set = Collections.synchronizedSet(new HashSet<Long>());
 	}
-
+ 
 	public boolean remove(Long val){
 		return this._set.remove(val);
 	}

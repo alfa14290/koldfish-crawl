@@ -25,15 +25,17 @@ import org.apache.commons.cli.Options;
 import org.apache.jena.iri.IRI;
 
 public class CrawlerMain {
-
+	/**
+	 * Parse the command line options To Do: Add another options if required
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		Options opts = new Options();
-		// Take command line orguments for seed file and output file
 		opts.addOption("s", "seed", true, "seed file");
 		opts.addOption("o", "output", true, "output file");
-		// ToDo add other options through options group
 		CommandLineParser parser = new GnuParser();
-
 		CommandLine cmd = null;
 		cmd = parser.parse(opts, args);
 		if (cmd.hasOption('h')) {
@@ -42,15 +44,20 @@ public class CrawlerMain {
 		}
 	}
 
-	// .get converts a uri to path or iri is possible also?
+	/**
+	 * Takes the file path consist of IRI and convert to Long to put into Frontier
+	 * ToDo: choose different frontier if there based by options 
+	 * ToDo: Move schedule to a different thread and seen will be common
+	 * 
+	 * @param cmd
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws JMSException
+	 */
 
 	private static void run(CommandLine cmd) throws FileNotFoundException, IOException, JMSException {
-		// check seed file
-
 		Dictionary dictionary = new Dictionary();
-
 		List<Long> actual = null;
-		// gives the file path
 		File seedList = new File(cmd.getOptionValue("s"));
 		System.out.println("reading seeds from " + seedList.getAbsolutePath());
 		if (!seedList.exists()) {
@@ -64,18 +71,13 @@ public class CrawlerMain {
 		s.close();
 		Iterable<Long> seeds = actual;
 
-		// seeds = prepareSeedsIterable(seedList);
-		// final File f = Paths.get(cmd.getOptionValue("s")).toFile();
-
 		if (!cmd.hasOption('s')) {
 			System.out.println("missing seed file");
 			return;
 		}
 		BasicFrontier frontier = new BasicFrontier();
-		// To do choose different frontier if there based by options
 		for (Long l : seeds)
 			frontier.add(l);
-		// TO do : Move schedule to a different thread and seen will be common
 		Seen _seen = new Seen_Queue();
 		SpiderQueue q = new SpiderQueue(_seen);
 		q.schedule(frontier);
@@ -84,12 +86,21 @@ public class CrawlerMain {
 
 	}
 
+	/**
+	 * Work with file extensions and stuff if required
+	 * 
+	 * @param seedList
+	 * @return
+	 */
 	private static Iterable<Long> prepareSeedsIterable(File seedList) {
-		// Work with file extensions and stuff if required
 		return null;
 	}
 
-	// give the possible options
+	/**
+	 * provide the help to use options
+	 * 
+	 * @param opts
+	 */
 	private static void help(Options opts) {
 		HelpFormatter f = new HelpFormatter();
 		f.printHelp("java -jar <jar> de.unikoblenz.west.koldfish.crawler.CrawlerMain" + " [" + "-h" + " |"
