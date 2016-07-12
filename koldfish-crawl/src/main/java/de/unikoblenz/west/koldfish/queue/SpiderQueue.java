@@ -30,7 +30,7 @@ public class SpiderQueue {
 		while (it.hasNext()) {
 			Long l = it.next();
 			if (!checkSeen(l)) {
-				add(l, false);
+				q.add(l);
 
 			}
 			it.remove();
@@ -60,20 +60,7 @@ public class SpiderQueue {
 		return next;
 	}
 
-	/**
-	 * Add the long value to the queue if its not added before
-	 * @param l
-	 * @param Processed
-	 */
-	public void add(Long l, boolean Processed) {
-
-		if (!Processed) {
-			if (q == null) {
-				q = new ConcurrentLinkedQueue<Long>();
-			}
-			q.add(l);
-		}
-	}
+	
 
 	/**
 	 * check from seen if this long value has seen or
@@ -90,36 +77,18 @@ public class SpiderQueue {
 		return _seen.hasBeenSeen(l);
 	}
 
+
 	/**
+	 * Set the Long value to seen.
 	 * Add to Seen Set(de.unikoblenz.west.koldfish.seen)
-	 * 
 	 * @param l
 	 */
-
-	public void addSeen(Long l) {
+	public void setSeen(Long l) {
 		if (l != null)
 			_seen.add(l);
-
 	}
 
-	/**
-	 * Set the Long value to seen
-	 * 
-	 * @param l
-	 */
-	void setSeen(long l) {
-		addSeen(l);
-	}
-
-	/**
-	 * Setter for the Seen instance to use.
-	 * 
-	 * @param seen
-	 */
-	public void setSeen(Seen seen) {
-		_seen = seen;
-	}
-
+	
 	/**
 	 * Getter for the Seen instance of this queue.
 	 * 

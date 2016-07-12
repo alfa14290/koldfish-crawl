@@ -32,9 +32,9 @@ public class SpiderQueueTest extends TestCase {
 		
 		
 		
-		q.add(url1, false);
-		q.add(url2, false);
-		q.add(url3, true);
+		//q.add(url1, false);
+		//q.add(url2, false);
+		//q.add(url3, true);
 
 		
 		assertEquals(q.spiderPoll(), url1);

@@ -31,9 +31,9 @@ public class SeenQueueTest extends TestCase {
 		frontier.remove(url1);
 		
 		
-		q.add(url1, false);
-		q.add(url2, false);
-		q.add(url3, false);
+		//q.add(url1, false);
+		//q.add(url2, false);
+		//q.add(url3, false);
 
 		
 		
