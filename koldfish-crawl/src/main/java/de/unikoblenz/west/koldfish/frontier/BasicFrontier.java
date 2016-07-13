@@ -25,27 +25,20 @@ public class BasicFrontier extends Frontier {
 		this._data.addAll(f.getData());
 	}
 
-	// public void addAll(Long[] c) {
-	// Collections.addAll(this._data, c);
-	// }
 	
-	/*
-	 * (non-Javadoc) overloaded: Directly adding the long[] to frontier objects
-	 * instead of using list
-	 */
-	public void addAll(long[] data) {
-		for (long value : data) {
-			this.add(new Long(value));
-		}
-	}
+//	public void addAll(long[] data) {
+//		for (long value : data) {
+//			this.add(new Long(value));
+//		}
+//	}
 
 	public Set<Long> getData() {
 		return this._data;
 	}
 
-	public void reset() {
-		_data.clear();
-	}
+	//public void reset() {
+		//_data.clear();
+	//}
 
 	public String toString() {
 		return _data.toString();

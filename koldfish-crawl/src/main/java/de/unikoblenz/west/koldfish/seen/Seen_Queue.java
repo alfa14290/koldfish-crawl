@@ -26,9 +26,9 @@ public class Seen_Queue implements Seen {
 		return _set.contains(l);
 	}
 
-	public boolean add(Collection<Long> longs) {
-		return _set.addAll(longs);
-	}
+	//public boolean add(Collection<Long> longs) {
+		//return _set.addAll(longs);
+	//}
 
 	public boolean add(Long l) {
 		return _set.add(l);

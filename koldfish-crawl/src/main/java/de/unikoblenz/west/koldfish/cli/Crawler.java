@@ -49,7 +49,10 @@ public class Crawler {
 					Iterator<long[]> it = response.iterator();
 
 					while (it.hasNext()) {
-						f2.addAll(it.next());
+						for (long value : it.next()) {
+							f2.add(new Long(value));
+						}
+						
 
 					}
 

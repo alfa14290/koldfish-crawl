@@ -15,7 +15,7 @@ public interface Seen {
 	 * @param longs
 	 * @return True after Adding the Long Collection
 	 */
-	public boolean add(Collection<Long> longs);
+	//public boolean add(Collection<Long> longs);
 
 	/**
 	 * 

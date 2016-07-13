@@ -18,8 +18,8 @@ public class crawlerTest extends TestCase{
 	long[] derefResponse1 = {3L,5L, 1L};
 	//data.add(set1);
 	//data.add(set2);
-	frontier.addAll(derefResponse);
-	frontier.addAll(derefResponse1);
+//	frontier.addAll(derefResponse);
+//	frontier.addAll(derefResponse1);
 	Long url1 = 1L;
 	Long url2 = 2L;
 	Long url3 = 3L;

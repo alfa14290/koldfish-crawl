@@ -42,6 +42,7 @@ public class CrawlerMain {
 			help(opts);
 			return;
 		}
+		run(cmd);
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class CrawlerMain {
 		if (!seedList.exists()) {
 			throw new FileNotFoundException("No file found at " + seedList.getAbsolutePath());
 		}
-		Scanner s = new Scanner(new File("seedList"));
+		Scanner s = new Scanner("seedList");
 
 		while (s.hasNextLine()) {
 			actual = dictionary.convertIris(Arrays.asList(s.nextLine()));
