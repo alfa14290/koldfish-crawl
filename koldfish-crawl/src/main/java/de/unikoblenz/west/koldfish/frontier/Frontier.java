@@ -24,7 +24,7 @@ public abstract class Frontier implements Iterable<Long> {
 	// public abstract void addAll(Long[] c);
 	//public abstract void addAll(long[] data);
 
-	public abstract void removeAll(Collection<Long> c);
+	//public abstract void removeAll(Collection<Long> c);
 
 	//public abstract void reset();
 

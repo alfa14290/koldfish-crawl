@@ -46,9 +46,9 @@ public class CrawlerMain {
 	}
 
 	/**
-	 * Takes the file path consist of IRI and convert to Long to put into Frontier
-	 * ToDo: choose different frontier if there based by options 
-	 * ToDo: Move schedule to a different thread and seen will be common
+	 * Takes the file path consist of IRI and convert to Long to put into
+	 * Frontier ToDo: choose different frontier if there based by options ToDo:
+	 * Move schedule to a different thread and seen will be common
 	 * 
 	 * @param cmd
 	 * @throws FileNotFoundException
@@ -81,20 +81,12 @@ public class CrawlerMain {
 			frontier.add(l);
 		Seen _seen = new Seen_Queue();
 		SpiderQueue q = new SpiderQueue(_seen);
-		q.schedule(frontier);
 		Crawler c = new Crawler(q, frontier, _seen);
-		c.evaluateList();
-
-	}
-
-	/**
-	 * Work with file extensions and stuff if required
-	 * 
-	 * @param seedList
-	 * @return
-	 */
-	private static Iterable<Long> prepareSeedsIterable(File seedList) {
-		return null;
+		while (!(q.isEmpty())) {
+			// TO Do!! check the size of queue then schedule from frontier
+			q.schedule(frontier);
+			c.evaluateList();
+		}
 	}
 
 	/**
@@ -107,6 +99,16 @@ public class CrawlerMain {
 		f.printHelp("java -jar <jar> de.unikoblenz.west.koldfish.crawler.CrawlerMain" + " [" + "-h" + " |"
 				+ " -i <seedfile>" + " -o <outputfile>" + " ]", opts);
 		return;
+	}
+
+	/**
+	 * Work with file extensions and stuff if required
+	 * 
+	 * @param seedList
+	 * @return
+	 */
+	private static Iterable<Long> prepareSeedsIterable(File seedList) {
+		return null;
 	}
 
 }

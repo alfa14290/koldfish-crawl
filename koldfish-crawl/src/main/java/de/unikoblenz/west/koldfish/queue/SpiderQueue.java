@@ -97,9 +97,7 @@ public class SpiderQueue {
 	public Seen getSeen() {
 		return _seen;
 	}
-	/**
-	 * @param _seen
-	 * @param q
-	 */
-
+	public boolean isEmpty(){
+		return q.isEmpty();
+	}
 }
