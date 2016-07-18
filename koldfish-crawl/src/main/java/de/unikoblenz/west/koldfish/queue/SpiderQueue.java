@@ -26,7 +26,6 @@ public class SpiderQueue {
 	 */
 	public void schedule(Frontier f) {
 		Iterator<Long> it = f.iterator();
-
 		while (it.hasNext()) {
 			Long l = it.next();
 			if (!checkSeen(l)) {
@@ -34,7 +33,6 @@ public class SpiderQueue {
 
 			}
 			it.remove();
-
 		}
 	}
 
@@ -45,9 +43,6 @@ public class SpiderQueue {
 	 * @throws Exception
 	 */
 	public Long spiderPoll() throws Exception {
-		if (q == null) {
-			throw new Exception("Queue not intialized");
-		}
 		Long next = null;
 		while (!q.isEmpty()) {
 			next = q.poll();
@@ -55,12 +50,9 @@ public class SpiderQueue {
 				setSeen(next);
 				return next;
 			}
-
 		}
 		return next;
 	}
-
-	
 
 	/**
 	 * check from seen if this long value has seen or
@@ -77,27 +69,31 @@ public class SpiderQueue {
 		return _seen.hasBeenSeen(l);
 	}
 
-
 	/**
-	 * Set the Long value to seen.
-	 * Add to Seen Set(de.unikoblenz.west.koldfish.seen)
+	 * Set the Long value to seen. Add to Seen
+	 * Set(de.unikoblenz.west.koldfish.seen)
+	 * 
 	 * @param l
 	 */
-	public void setSeen(Long l) {
+	private void setSeen(Long l) {
 		if (l != null)
 			_seen.add(l);
 	}
 
-	
 	/**
-	 * Getter for the Seen instance of this queue.
+	 * Getter for the Seen instance of this queue. only for Test case
 	 * 
-	 * @return
+	 * @return instance of seen set 
 	 */
 	public Seen getSeen() {
 		return _seen;
 	}
-	public boolean isEmpty(){
+
+	/**
+	 * 
+	 * @return true if queue is empty
+	 */
+	public boolean isEmpty() {
 		return q.isEmpty();
 	}
 }
