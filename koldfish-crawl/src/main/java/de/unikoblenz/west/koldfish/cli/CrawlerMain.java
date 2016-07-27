@@ -64,7 +64,7 @@ public class CrawlerMain {
 		if (!seedList.exists()) {
 			throw new FileNotFoundException("No file found at " + seedList.getAbsolutePath());
 		}
-		Scanner s = new Scanner("seedList");
+		Scanner s = new Scanner(seedList);
 
 		while (s.hasNextLine()) {
 			actual = dictionary.convertIris(Arrays.asList(s.nextLine()));
@@ -82,11 +82,11 @@ public class CrawlerMain {
 		Seen _seen = new Seen_Queue();
 		SpiderQueue q = new SpiderQueue(_seen);
 		Crawler c = new Crawler(q, frontier, _seen);
-		while (!(q.isEmpty())) {
+		do {
 			// TO Do!! check the size of queue then schedule from frontier
 			q.schedule(frontier);
 			c.evaluateList();
-		}
+		}while (!(q.isEmpty()));
 	}
 
 	/**
