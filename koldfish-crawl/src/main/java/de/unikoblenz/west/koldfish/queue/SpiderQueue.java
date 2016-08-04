@@ -30,9 +30,8 @@ public class SpiderQueue {
 			Long l = it.next();
 			if (!checkSeen(l)) {
 				q.add(l);
-
 			}
-			it.remove();
+			//it.remove();
 		}
 	}
 

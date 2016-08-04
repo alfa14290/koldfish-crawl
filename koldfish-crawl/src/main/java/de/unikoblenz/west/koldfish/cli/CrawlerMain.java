@@ -9,13 +9,11 @@ import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.jms.JMSException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -25,6 +23,8 @@ import org.apache.commons.cli.Options;
 import org.apache.jena.iri.IRI;
 
 public class CrawlerMain {
+	//static AtomicInteger atomicInt = new AtomicInteger(200) ;
+	
 	/**
 	 * Parse the command line options To Do: Add another options if required
 	 * 
@@ -51,12 +51,10 @@ public class CrawlerMain {
 	 * Move schedule to a different thread and seen will be common
 	 * 
 	 * @param cmd
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws JMSException
+	 * @throws Exception 
 	 */
 
-	private static void run(CommandLine cmd) throws FileNotFoundException, IOException, JMSException {
+	private static void run(CommandLine cmd) throws Exception {
 		Dictionary dictionary = new Dictionary();
 		List<Long> actual = null;
 		File seedList = new File(cmd.getOptionValue("s"));
@@ -81,12 +79,17 @@ public class CrawlerMain {
 			frontier.add(l);
 		Seen _seen = new Seen_Queue();
 		SpiderQueue q = new SpiderQueue(_seen);
+		
+		
 		Crawler c = new Crawler(q, frontier, _seen);
-		do {
+		
+
+		//do {
 			// TO Do!! check the size of queue then schedule from frontier
 			q.schedule(frontier);
 			c.evaluateList();
-		}while (!(q.isEmpty()));
+			//atomicInt.decrementAndGet();
+		//}while (!(q.isEmpty()));
 	}
 
 	/**
@@ -100,6 +103,9 @@ public class CrawlerMain {
 				+ " -i <seedfile>" + " -o <outputfile>" + " ]", opts);
 		return;
 	}
+	//public static int getatomicInt() {
+		//return atomicInt.incrementAndGet();
+	//}
 
 	/**
 	 * Work with file extensions and stuff if required

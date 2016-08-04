@@ -3,6 +3,9 @@ package de.unikoblenz.west.koldfish.cli;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.google.common.util.concurrent.Service.Listener;
 
 import de.unikoblenz.west.koldfish.dam.DataAccessModule;
 import de.unikoblenz.west.koldfish.dam.DataAccessModuleListener;
@@ -19,11 +22,39 @@ public class Crawler {
 	SpiderQueue q;
 	Frontier f1;
 	Seen _seen;
+	DataAccessModule dam;
+	
+	
 
-	public Crawler(SpiderQueue q, Frontier frontier, Seen _seen) {
+	public Crawler(SpiderQueue q, Frontier frontier, Seen _seen) throws Exception {
 		this.q = q;
 		this.f1 = frontier;
 		this._seen = _seen;
+		dam =  new JmsDataAccessModule();
+		DataAccessModuleListener listener = new DataAccessModuleListener() {
+			
+			public void onErrorResponse(ErrorResponse response) {
+				_seen.remove(new Long(response.getEncodedDerefIri()));
+				System.out.println("it has been removed");
+			}
+			
+			public void onDerefResponse(DerefResponse response) {
+				System.out.println(response.getEncodedDerefIri());
+				Iterator<long[]> it = response.iterator();
+				
+				//if(it!=null)
+					//CrawlerMain.getatomicInt();
+				while (it.hasNext()) {
+					for (long value : it.next()) {
+						f1.add(new Long(value));
+					}
+					
+				}
+
+			}
+		};
+		dam.addListener(listener);
+		dam.start();
 
 	}
 
@@ -35,32 +66,17 @@ public class Crawler {
 
 		try {
 			Long l = q.spiderPoll();
-			DataAccessModule dam = new JmsDataAccessModule();
 
-			Frontier f2 = new BasicFrontier();
-			DataAccessModuleListener listener = new DataAccessModuleListener() {
-
-				public void onErrorResponse(ErrorResponse response) {
-					_seen.remove(new Long(response.getEncodedDerefIri()));
-
-				}
-
-				public void onDerefResponse(DerefResponse response) {
-					Iterator<long[]> it = response.iterator();
-
-					while (it.hasNext()) {
-						for (long value : it.next()) {
-							f2.add(new Long(value));
-						}
-						
-
-					}
-
-				}
-			};
-			dam.addListener(listener);
+			//Frontier f2 = new BasicFrontier();
+			
+			
+		//	System.out.println("it started ->" +dam.isStarted());
+			//while(CrawlerMain.atomicInt.compareAndSet(0, 0)){
+			
 			dam.deref(l.longValue());
-			this.f1.addAll(f2);
+			///System.out.println("it has been removed1");
+			//}
+			//this.f1.addAll(f2);
 
 		} catch (Exception e) {
 			e.printStackTrace();

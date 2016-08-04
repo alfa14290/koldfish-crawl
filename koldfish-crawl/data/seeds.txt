@@ -1,1 +1,1 @@
-http://dbpedia.org/page/Berlin
+http://dbpedia.org/resource/Berlin
