@@ -41,21 +41,21 @@ public class Crawler {
 			public void onDerefResponse(DerefResponse response) {
 				System.out.println(response.getEncodedDerefIri());
 				Iterator<long[]> it = response.iterator();
-				
+				Frontier f2 = new BasicFrontier();
 				//if(it!=null)
 					//CrawlerMain.getatomicInt();
 				while (it.hasNext()) {
 					for (long value : it.next()) {
 						f1.add(new Long(value));
 					}
-					
+					q.schedule(f2);
 				}
 
 			}
 		};
 		dam.addListener(listener);
 		dam.start();
-
+       System.out.println("listnerstarted: " + dam.isStarted());
 	}
 
 	/**

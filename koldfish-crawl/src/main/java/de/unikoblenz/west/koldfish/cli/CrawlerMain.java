@@ -84,12 +84,19 @@ public class CrawlerMain {
 		Crawler c = new Crawler(q, frontier, _seen);
 		
 
-		//do {
+		do {
 			// TO Do!! check the size of queue then schedule from frontier
+		
+			
 			q.schedule(frontier);
+			while(q.isEmpty()){
+				//q.schedule(frontier);
+				//c.evaluateList();
+			}
 			c.evaluateList();
+		
 			//atomicInt.decrementAndGet();
-		//}while (!(q.isEmpty()));
+		}while (!(q.isEmpty()));
 	}
 
 	/**
