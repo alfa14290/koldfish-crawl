@@ -46,8 +46,9 @@ public class Crawler {
 					//CrawlerMain.getatomicInt();
 				while (it.hasNext()) {
 					for (long value : it.next()) {
-						f1.add(new Long(value));
+						f2.add(new Long(value));
 					}
+					
 					q.schedule(f2);
 				}
 
@@ -66,6 +67,7 @@ public class Crawler {
 
 		try {
 			Long l = q.spiderPoll();
+			System.out.println("i take from queue");
 
 			//Frontier f2 = new BasicFrontier();
 			
