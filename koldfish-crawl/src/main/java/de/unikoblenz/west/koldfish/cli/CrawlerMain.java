@@ -94,7 +94,7 @@ public class CrawlerMain {
 				//c.evaluateList();
 			}
 			c.evaluateList();
-		
+		    System.out.println("checking the branch");
 			//atomicInt.decrementAndGet();
 		}while (!(q.isEmpty()));
 	}
