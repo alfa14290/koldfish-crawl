@@ -9,6 +9,7 @@ import java.util.Set;
 public abstract class Frontier implements Iterable<Long> {
 
 	public abstract void add(Long l);
+	public abstract int size();
 
 	public void addAll(Collection<Long> c) {
 		for (Long l : c) {

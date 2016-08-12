@@ -52,6 +52,9 @@ public class BasicFrontier extends Frontier {
 	public Set<Long> getData() {
 		return this._data;
 	}
+	public int size(){
+		return _data.size();
+	}
 
 	public String toString() {
 		return _data.toString();

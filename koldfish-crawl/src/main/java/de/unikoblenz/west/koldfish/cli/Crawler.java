@@ -23,40 +23,43 @@ public class Crawler {
 	Frontier f1;
 	Seen _seen;
 	DataAccessModule dam;
-	
-	
 
 	public Crawler(SpiderQueue q, Frontier frontier, Seen _seen) throws Exception {
 		this.q = q;
 		this.f1 = frontier;
 		this._seen = _seen;
-		dam =  new JmsDataAccessModule();
+		dam = new JmsDataAccessModule();
 		DataAccessModuleListener listener = new DataAccessModuleListener() {
-			
+
 			public void onErrorResponse(ErrorResponse response) {
 				_seen.remove(new Long(response.getEncodedDerefIri()));
 				System.out.println("it has been removed");
 			}
-			
+
 			public void onDerefResponse(DerefResponse response) {
 				System.out.println(response.getEncodedDerefIri());
 				Iterator<long[]> it = response.iterator();
+
 				Frontier f2 = new BasicFrontier();
-				//if(it!=null)
-					//CrawlerMain.getatomicInt();
+				// if(it!=null)
+				// CrawlerMain.getatomicInt();
+
 				while (it.hasNext()) {
 					for (long value : it.next()) {
 						f2.add(new Long(value));
+
 					}
-					
+
 					q.schedule(f2);
+
 				}
+				System.out.println("frontier size is " + f2.size() + "should not be sameas " + q.queueSize());
 
 			}
 		};
 		dam.addListener(listener);
 		dam.start();
-       System.out.println("listnerstarted: " + dam.isStarted());
+
 	}
 
 	/**
@@ -67,18 +70,16 @@ public class Crawler {
 
 		try {
 			Long l = q.spiderPoll();
-			System.out.println("i take from queue");
 
-			//Frontier f2 = new BasicFrontier();
-			
-			
-		//	System.out.println("it started ->" +dam.isStarted());
-			//while(CrawlerMain.atomicInt.compareAndSet(0, 0)){
-			
+			// Frontier f2 = new BasicFrontier();
+
+			// System.out.println("it started ->" +dam.isStarted());
+			// while(CrawlerMain.atomicInt.compareAndSet(0, 0)){
+
 			dam.deref(l.longValue());
-			///System.out.println("it has been removed1");
-			//}
-			//this.f1.addAll(f2);
+			/// System.out.println("it has been removed1");
+			// }
+			// this.f1.addAll(f2);
 
 		} catch (Exception e) {
 			e.printStackTrace();

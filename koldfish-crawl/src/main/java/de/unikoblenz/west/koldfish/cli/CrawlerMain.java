@@ -23,8 +23,8 @@ import org.apache.commons.cli.Options;
 import org.apache.jena.iri.IRI;
 
 public class CrawlerMain {
-	//static AtomicInteger atomicInt = new AtomicInteger(200) ;
-	
+	// static AtomicInteger atomicInt = new AtomicInteger(200) ;
+
 	/**
 	 * Parse the command line options To Do: Add another options if required
 	 * 
@@ -51,7 +51,7 @@ public class CrawlerMain {
 	 * Move schedule to a different thread and seen will be common
 	 * 
 	 * @param cmd
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	private static void run(CommandLine cmd) throws Exception {
@@ -79,25 +79,39 @@ public class CrawlerMain {
 			frontier.add(l);
 		Seen _seen = new Seen_Queue();
 		SpiderQueue q = new SpiderQueue(_seen);
-		
-		
+
 		Crawler c = new Crawler(q, frontier, _seen);
 		q.schedule(frontier);
 
-		do {
-			// TO Do!! check the size of queue then schedule from frontier
-		
-			
-			//q.schedule(frontier);
-			while(q.isEmpty()){
-				//q.schedule(frontier);
-				//c.evaluateList();
-			}
+		if (q.isEmpty()) {
+			q.schedule(frontier);
 			c.evaluateList();
-		    System.out.println("checking the branch");
-			//atomicInt.decrementAndGet();
-		}while (!(q.isEmpty()));
+
+		} else {
+			int i = 0;
+			while (!(q.isEmpty())) {
+				System.out.println("the queue size is " + q.queueSize());
+				c.evaluateList();
+				i++;
+			}
+			// System.out.println("loop executed " + i);
+		}
 	}
+	//
+	// do {
+	// // TO Do!! check the size of queue then schedule from frontier
+	//
+	//
+	// q.schedule(frontier);
+	// while(q.isEmpty()){
+	// //q.schedule(frontier);
+	// //c.evaluateList();
+	// }
+	// c.evaluateList();
+	// System.out.println("checking the branch");
+	// //atomicInt.decrementAndGet();
+	// }while (!(q.isEmpty()));
+	// }
 
 	/**
 	 * provide the help to use options
@@ -110,9 +124,9 @@ public class CrawlerMain {
 				+ " -i <seedfile>" + " -o <outputfile>" + " ]", opts);
 		return;
 	}
-	//public static int getatomicInt() {
-		//return atomicInt.incrementAndGet();
-	//}
+	// public static int getatomicInt() {
+	// return atomicInt.incrementAndGet();
+	// }
 
 	/**
 	 * Work with file extensions and stuff if required

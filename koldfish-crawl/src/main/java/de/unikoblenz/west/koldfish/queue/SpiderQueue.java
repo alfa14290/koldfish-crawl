@@ -25,14 +25,19 @@ public class SpiderQueue {
 	 * @param f
 	 */
 	public void schedule(Frontier f) {
+
 		Iterator<Long> it = f.iterator();
+		int i = 0;
 		while (it.hasNext()) {
 			Long l = it.next();
 			if (!checkSeen(l)) {
 				q.add(l);
+
 			}
-			//it.remove();
+			// it.remove();
+			i++;
 		}
+		System.out.println(" the sizes are " + f.size() + " same as " + q.size());
 	}
 
 	/**
@@ -43,7 +48,7 @@ public class SpiderQueue {
 	 */
 	public Long spiderPoll() throws Exception {
 		Long next = null;
-		while (!q.isEmpty()) {
+		while (!(q.isEmpty())) {
 			next = q.poll();
 			if (!checkSeen(next)) {
 				setSeen(next);
@@ -60,7 +65,7 @@ public class SpiderQueue {
 	 * @param l
 	 * @return true if its seen
 	 */
-	private boolean checkSeen(Long l) {
+	public boolean checkSeen(Long l) {
 		if (l == null) {
 			throw new NullPointerException("l cannot be null");
 		}
@@ -74,7 +79,7 @@ public class SpiderQueue {
 	 * 
 	 * @param l
 	 */
-	private void setSeen(Long l) {
+	public void setSeen(Long l) {
 		if (l != null)
 			_seen.add(l);
 	}
@@ -82,12 +87,11 @@ public class SpiderQueue {
 	/**
 	 * Getter for the Seen instance of this queue. only for Test case
 	 * 
-	 * @return instance of seen set 
+	 * @return instance of seen set
 	 */
 	public Seen getSeen() {
 		return _seen;
 	}
-	
 
 	/**
 	 * 
@@ -95,5 +99,13 @@ public class SpiderQueue {
 	 */
 	public boolean isEmpty() {
 		return q.isEmpty();
+	}
+
+	/**
+	 * 
+	 * @return the size of queue
+	 */
+	public int queueSize() {
+		return q.size();
 	}
 }
