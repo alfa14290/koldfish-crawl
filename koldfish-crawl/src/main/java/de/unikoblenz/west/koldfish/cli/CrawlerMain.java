@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -19,8 +20,8 @@ import de.unikoblenz.west.koldfish.seen.Seen;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
 public class CrawlerMain implements Runnable{
-  // static AtomicInteger atomicInt = new AtomicInteger(200) ;
-	public static volatile boolean keepProcessing= true;
+  static AtomicInteger atomicInt = new AtomicInteger(1) ;
+	//public static volatile boolean keepProcessing= true;
   /**
    * Parse the command line options To Do: Add another options if required
    * 
@@ -81,11 +82,12 @@ public class CrawlerMain implements Runnable{
     Crawler c = new Crawler(q, frontier, _seen);
     q.schedule(frontier);
 
-    while (keepProcessing || !q.isEmpty()) {
-     //if (!q.isEmpty()) {
+    while (!atomicInt.equals(0)) {
+    if (!q.isEmpty()) {
         System.out.println("the queue size is " + q.queueSize());
+        atomicInt.incrementAndGet();
         c.evaluateList();
-      //}
+      }
     }
     
   }

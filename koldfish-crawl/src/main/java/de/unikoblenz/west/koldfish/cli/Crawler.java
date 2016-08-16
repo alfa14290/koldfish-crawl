@@ -1,6 +1,8 @@
 package de.unikoblenz.west.koldfish.cli;
 
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import de.unikoblenz.west.koldfish.dam.DataAccessModule;
 import de.unikoblenz.west.koldfish.dam.DataAccessModuleListener;
 import de.unikoblenz.west.koldfish.dam.ErrorResponse;
@@ -46,9 +48,9 @@ public class Crawler {
 					}
                    
 					q.schedule(f2);
-					if(q.queueSize()==10000){
-						CrawlerMain.keepProcessing =false;
-					}
+//					if(q.queueSize()==10000){
+//						CrawlerMain.keepProcessing =false;
+//					}
 
 				}
 				System.out.println("frontier size is " + f2.size() + "should not be sameas " + q.queueSize());
@@ -75,8 +77,9 @@ public class Crawler {
 			// while(CrawlerMain.atomicInt.compareAndSet(0, 0)){]
 			CrawlerMain m = new CrawlerMain();
 			
-            while(CrawlerMain.keepProcessing =true)
+            //while(CrawlerMain.keepProcessing =true)
 			dam.deref(l.longValue());
+			CrawlerMain.atomicInt.decrementAndGet();
 			/// System.out.println("it has been removed1");
 			// }
 			// this.f1.addAll(f2);
