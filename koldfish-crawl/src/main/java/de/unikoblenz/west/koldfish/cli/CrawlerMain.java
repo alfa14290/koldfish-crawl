@@ -18,9 +18,9 @@ import de.unikoblenz.west.koldfish.queue.SpiderQueue;
 import de.unikoblenz.west.koldfish.seen.Seen;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
-public class CrawlerMain {
+public class CrawlerMain implements Runnable{
   // static AtomicInteger atomicInt = new AtomicInteger(200) ;
-
+	public static volatile boolean keepProcessing= true;
   /**
    * Parse the command line options To Do: Add another options if required
    * 
@@ -58,6 +58,10 @@ public class CrawlerMain {
     if (!seedList.exists()) {
       throw new FileNotFoundException("No file found at " + seedList.getAbsolutePath());
     }
+    if (!cmd.hasOption('s')) {
+        System.out.println("missing seed file");
+        return;
+      }
     Scanner s = new Scanner(seedList);
 
     while (s.hasNextLine()) {
@@ -66,42 +70,26 @@ public class CrawlerMain {
     s.close();
     Iterable<Long> seeds = actual;
 
-    if (!cmd.hasOption('s')) {
-      System.out.println("missing seed file");
-      return;
-    }
+    
     BasicFrontier frontier = new BasicFrontier();
     for (Long l : seeds)
       frontier.add(l);
+
     Seen _seen = new Seen_Queue();
     SpiderQueue q = new SpiderQueue(_seen);
 
     Crawler c = new Crawler(q, frontier, _seen);
     q.schedule(frontier);
 
-    while (true) {
-      if (!q.isEmpty()) {
+    while (keepProcessing || !q.isEmpty()) {
+     //if (!q.isEmpty()) {
         System.out.println("the queue size is " + q.queueSize());
         c.evaluateList();
-      }
+      //}
     }
-
+    
   }
-  //
-  // do {
-  // // TO Do!! check the size of queue then schedule from frontier
-  //
-  //
-  // q.schedule(frontier);
-  // while(q.isEmpty()){
-  // //q.schedule(frontier);
-  // //c.evaluateList();
-  // }
-  // c.evaluateList();
-  // System.out.println("checking the branch");
-  // //atomicInt.decrementAndGet();
-  // }while (!(q.isEmpty()));
-  // }
+  
 
   /**
    * provide the help to use options
@@ -117,6 +105,10 @@ public class CrawlerMain {
   // public static int getatomicInt() {
   // return atomicInt.incrementAndGet();
   // }
+//  public void cancelExecution()  
+//  {  
+//   keepProcessing = false;  
+//  }  
 
   /**
    * Work with file extensions and stuff if required
@@ -127,5 +119,11 @@ public class CrawlerMain {
   private static Iterable<Long> prepareSeedsIterable(File seedList) {
     return null;
   }
+
+@Override
+public void run() {
+	
+	
+}
 
 }

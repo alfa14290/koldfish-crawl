@@ -1,12 +1,6 @@
 package de.unikoblenz.west.koldfish.cli;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.google.common.util.concurrent.Service.Listener;
-
 import de.unikoblenz.west.koldfish.dam.DataAccessModule;
 import de.unikoblenz.west.koldfish.dam.DataAccessModuleListener;
 import de.unikoblenz.west.koldfish.dam.ErrorResponse;
@@ -41,6 +35,7 @@ public class Crawler {
 				Iterator<long[]> it = response.iterator();
 
 				Frontier f2 = new BasicFrontier();
+				CrawlerMain m = new CrawlerMain();
 				// if(it!=null)
 				// CrawlerMain.getatomicInt();
 
@@ -49,8 +44,11 @@ public class Crawler {
 						f2.add(new Long(value));
 
 					}
-
+                   
 					q.schedule(f2);
+					if(q.queueSize()==10000){
+						CrawlerMain.keepProcessing =false;
+					}
 
 				}
 				System.out.println("frontier size is " + f2.size() + "should not be sameas " + q.queueSize());
@@ -74,8 +72,10 @@ public class Crawler {
 			// Frontier f2 = new BasicFrontier();
 
 			// System.out.println("it started ->" +dam.isStarted());
-			// while(CrawlerMain.atomicInt.compareAndSet(0, 0)){
-
+			// while(CrawlerMain.atomicInt.compareAndSet(0, 0)){]
+			CrawlerMain m = new CrawlerMain();
+			
+            while(CrawlerMain.keepProcessing =true)
 			dam.deref(l.longValue());
 			/// System.out.println("it has been removed1");
 			// }

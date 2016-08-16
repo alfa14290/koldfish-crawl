@@ -37,7 +37,7 @@ public class SpiderQueue {
       it.remove();
       i++;
     }
-    System.out.println(" the sizes are " + f.size() + " same as " + q.size());
+    //System.out.println(" the sizes are " + f.size() + " same as " + q.size());
   }
 
   /**
@@ -54,6 +54,7 @@ public class SpiderQueue {
         setSeen(next);
         return next;
       }
+      
     }
     return next;
   }
