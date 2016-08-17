@@ -2,7 +2,7 @@ package de.unikoblenz.west.koldfish.queue;
 
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import de.unikoblenz.west.koldfish.frontier.Frontier;
 import de.unikoblenz.west.koldfish.seen.Seen;;
@@ -15,7 +15,7 @@ public class SpiderQueue {
   public SpiderQueue(Seen seen) {
     super();
     _seen = seen;
-    q = new ConcurrentLinkedQueue<Long>();
+    q = new LinkedBlockingQueue<Long>();
   }
 
   /**
@@ -37,7 +37,7 @@ public class SpiderQueue {
       it.remove();
       i++;
     }
-    //System.out.println(" the sizes are " + f.size() + " same as " + q.size());
+    // System.out.println(" the sizes are " + f.size() + " same as " + q.size());
   }
 
   /**
@@ -47,15 +47,12 @@ public class SpiderQueue {
    * @throws Exception
    */
   public Long spiderPoll() throws Exception {
-    Long next = null;
-    while (!(q.isEmpty())) {
+    Long next;
+    do {
       next = q.poll();
-      if (!checkSeen(next)) {
-        setSeen(next);
-        return next;
-      }
-      
-    }
+    } while (next == null || checkSeen(next));
+
+    setSeen(next);
     return next;
   }
 
@@ -108,8 +105,8 @@ public class SpiderQueue {
     return q.size();
   }
 
-public void remove() {
-	 this.q.clear();;
-	
-}
+  public void remove() {
+    this.q.clear();;
+
+  }
 }

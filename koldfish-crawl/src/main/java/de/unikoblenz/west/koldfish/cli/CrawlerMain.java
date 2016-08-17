@@ -19,9 +19,10 @@ import de.unikoblenz.west.koldfish.queue.SpiderQueue;
 import de.unikoblenz.west.koldfish.seen.Seen;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
-public class CrawlerMain implements Runnable{
-  static AtomicInteger atomicInt = new AtomicInteger(1) ;
-	//public static volatile boolean keepProcessing= true;
+public class CrawlerMain implements Runnable {
+  static AtomicInteger atomicInt = new AtomicInteger(0);
+
+  // public static volatile boolean keepProcessing= true;
   /**
    * Parse the command line options To Do: Add another options if required
    * 
@@ -60,9 +61,9 @@ public class CrawlerMain implements Runnable{
       throw new FileNotFoundException("No file found at " + seedList.getAbsolutePath());
     }
     if (!cmd.hasOption('s')) {
-        System.out.println("missing seed file");
-        return;
-      }
+      System.out.println("missing seed file");
+      return;
+    }
     Scanner s = new Scanner(seedList);
 
     while (s.hasNextLine()) {
@@ -71,7 +72,7 @@ public class CrawlerMain implements Runnable{
     s.close();
     Iterable<Long> seeds = actual;
 
-    
+
     BasicFrontier frontier = new BasicFrontier();
     for (Long l : seeds)
       frontier.add(l);
@@ -82,17 +83,14 @@ public class CrawlerMain implements Runnable{
     Crawler c = new Crawler(q, frontier, _seen);
     q.schedule(frontier);
 
-    while ((atomicInt.get())>0) {
-    if (!q.isEmpty()) {
-       // System.out.println("the queue size is " + q.queueSize());
-    	atomicInt.incrementAndGet();
-        c.evaluateList();
-          
-      }
+    while ((atomicInt.get()) > 0 || !q.isEmpty()) {
+      // System.out.println("the queue size is " + q.queueSize());
+      c.evaluateList();
     }
-    
+    System.out.println(
+        "===================================== stopped ======================================");
   }
-  
+
 
   /**
    * provide the help to use options
@@ -108,10 +106,10 @@ public class CrawlerMain implements Runnable{
   // public static int getatomicInt() {
   // return atomicInt.incrementAndGet();
   // }
-//  public void cancelExecution()  
-//  {  
-//   keepProcessing = false;  
-//  }  
+  // public void cancelExecution()
+  // {
+  // keepProcessing = false;
+  // }
 
   /**
    * Work with file extensions and stuff if required
@@ -123,10 +121,10 @@ public class CrawlerMain implements Runnable{
     return null;
   }
 
-@Override
-public void run() {
-	
-	
-}
+  @Override
+  public void run() {
+
+
+  }
 
 }
