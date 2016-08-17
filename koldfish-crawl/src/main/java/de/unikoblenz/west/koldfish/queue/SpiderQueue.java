@@ -107,4 +107,9 @@ public class SpiderQueue {
   public int queueSize() {
     return q.size();
   }
+
+public void remove() {
+	 this.q.clear();;
+	
+}
 }

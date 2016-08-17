@@ -82,11 +82,12 @@ public class CrawlerMain implements Runnable{
     Crawler c = new Crawler(q, frontier, _seen);
     q.schedule(frontier);
 
-    while (!atomicInt.equals(0)) {
+    while ((atomicInt.get())>0) {
     if (!q.isEmpty()) {
-        System.out.println("the queue size is " + q.queueSize());
-        atomicInt.incrementAndGet();
+       // System.out.println("the queue size is " + q.queueSize());
+    	atomicInt.incrementAndGet();
         c.evaluateList();
+          
       }
     }
     
