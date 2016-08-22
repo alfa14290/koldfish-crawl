@@ -19,7 +19,7 @@ import de.unikoblenz.west.koldfish.queue.SpiderQueue;
 import de.unikoblenz.west.koldfish.seen.Seen;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
-public class CrawlerMain implements Runnable {
+public class CrawlerMain  {
   static AtomicInteger atomicInt = new AtomicInteger(0);
 
   // public static volatile boolean keepProcessing= true;
@@ -79,16 +79,13 @@ public class CrawlerMain implements Runnable {
 
     Seen _seen = new Seen_Queue();
     SpiderQueue q = new SpiderQueue(_seen);
-
+   
     Crawler c = new Crawler(q, frontier, _seen);
     q.schedule(frontier);
-
-    while ((atomicInt.get()) > 0 || !q.isEmpty()) {
-      // System.out.println("the queue size is " + q.queueSize());
-      c.evaluateList();
-    }
-    System.out.println(
-        "===================================== stopped ======================================");
+    
+    Thread t =new Thread(c);
+    t.start();
+   
   }
 
 
@@ -121,10 +118,5 @@ public class CrawlerMain implements Runnable {
     return null;
   }
 
-  @Override
-  public void run() {
-
-
-  }
-
+ 
 }

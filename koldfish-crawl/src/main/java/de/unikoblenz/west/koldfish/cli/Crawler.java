@@ -12,7 +12,7 @@ import de.unikoblenz.west.koldfish.messages.DerefResponse;
 import de.unikoblenz.west.koldfish.queue.SpiderQueue;
 import de.unikoblenz.west.koldfish.seen.Seen;
 
-public class Crawler {
+public class Crawler implements Runnable {
 
   SpiderQueue q;
   Frontier f1;
@@ -69,27 +69,57 @@ public class Crawler {
 
   }
 
-  /**
+
+
+/**
    * Poll the queue and implements the listner for the Dref Response. Add the response to frontier
    * Set
    */
-  public void evaluateList() {
-    try {
-      Long l = q.spiderPoll();
+//  public void evaluateList() {
+//    try {
+//      Long l = q.spiderPoll();
+//
+//      int pendingMessages = CrawlerMain.atomicInt.incrementAndGet();
+//
+//      System.out.println("pending messages: " + pendingMessages);
+//
+//      while (pendingMessages > 100) {
+//      }
+//
+//      dam.deref(l.longValue());
+//
+//
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//
+//  }
 
-      int pendingMessages = CrawlerMain.atomicInt.incrementAndGet();
+@Override
+public void run() {
+	// TODO Auto-generated method stub
+	 while ((CrawlerMain.atomicInt.get()) > 0 || !q.isEmpty()) {
+	      // System.out.println("the queue size is " + q.queueSize());
+		 try {
+		      Long l = q.spiderPoll();
 
-      System.out.println("pending messages: " + pendingMessages);
+		      int pendingMessages = CrawlerMain.atomicInt.incrementAndGet();
 
-      while (pendingMessages > 100) {
-      }
+		      System.out.println("pending messages: " + pendingMessages);
 
-      dam.deref(l.longValue());
+		      while (pendingMessages > 100) {
+		      }
+
+		      dam.deref(l.longValue());
 
 
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-  }
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+	      //c.evaluateList();
+	    }
+	    System.out.println(
+	        "===================================== stopped ======================================");
+	
+}
 }
