@@ -28,18 +28,22 @@ public class Crawler implements Runnable {
 
       @Override
       public void onErrorResponse(ErrorResponse response) {
+        System.out.println("it has been removed because of the error response");
+
         if (_seen.remove(new Long(response.getEncodedDerefIri()))) {
           CrawlerMain.pendingMessage.decrementAndGet();
         }
 
-        System.out.println("it has been removed because of the error response");
+        synchronized (CrawlerMain.pendingMessage) {
+          CrawlerMain.pendingMessage.notifyAll();
+        }
       }
 
       @Override
       public void onDerefResponse(DerefResponse response) {
-        
+
         Iterator<long[]> it = response.iterator();
-        
+
         Frontier f2 = new BasicFrontier();
         CrawlerMain m = new CrawlerMain();
         // if(it!=null)
@@ -47,25 +51,24 @@ public class Crawler implements Runnable {
 
         while (it.hasNext()) {
           for (long value : it.next()) {
-//        	  System.out.println("the response is " + value);
+            // System.out.println("the response is " + value);
             f2.add(new Long(value));
-        	  //System.out.println("the response is " + f2.getData());
+            // System.out.println("the response is " + f2.getData());
           }
-          
+
           q.schedule(f2);
-          
         }
 
         if (_seen.hasBeenSeen(response.getEncodedDerefIri())) {
           CrawlerMain.pendingMessage.decrementAndGet();
         }
-          while(CrawlerMain.pendingMessage.get()==0){
-        	  dam.notifyAll();
-        	  System.out.println("++++++++++++++++++++++++++++i am notifying ++++++++++++");
-          }
-          
-          
-        
+        synchronized (CrawlerMain.pendingMessage) {
+          CrawlerMain.pendingMessage.notifyAll();
+        }
+
+
+        System.out.println("++++++++++++++++++++++++++++i am notifying ++++++++++++");
+
 
 
         System.out
@@ -80,64 +83,79 @@ public class Crawler implements Runnable {
 
 
 
-/**
+  /**
    * Poll the queue and implements the listner for the Dref Response. Add the response to frontier
    * Set
    */
-//  public void evaluateList() {
-//    try {
-//      Long l = q.spiderPoll();
-//
-//      int pendingMessages = CrawlerMain.atomicInt.incrementAndGet();
-//
-//      System.out.println("pending messages: " + pendingMessages);
-//
-//      while (pendingMessages > 100) {
-//      }
-//
-//      dam.deref(l.longValue());
-//
-//
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//
-//  }
+  // public void evaluateList() {
+  // try {
+  // Long l = q.spiderPoll();
+  //
+  // int pendingMessages = CrawlerMain.atomicInt.incrementAndGet();
+  //
+  // System.out.println("pending messages: " + pendingMessages);
+  //
+  // while (pendingMessages > 100) {
+  // }
+  //
+  // dam.deref(l.longValue());
+  //
+  //
+  // } catch (Exception e) {
+  // e.printStackTrace();
+  // }
+  //
+  // }
 
-@Override
-public void run() {
-	// TODO Auto-generated method stub
-	 while ((CrawlerMain.pendingMessage.get()) > 0 || !q.isEmpty()) {
-	      // System.out.println("the queue size is " + q.queueSize());
-		 try {
-		      Long l = q.spiderPoll();
-		      System.out.println("the long value is " + l );
+  @Override
+  public void run() {
+    while ((CrawlerMain.pendingMessage.get()) > 0 || !q.isEmpty()) {
 
-		      int pendingMessages = CrawlerMain.pendingMessage.incrementAndGet();
+      if (CrawlerMain.pendingMessage.get() > 100) {
+        try {
+          synchronized (CrawlerMain.pendingMessage) {
+            CrawlerMain.pendingMessage.wait();
+          }
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      // System.out.println("the queue size is " + q.queueSize());
+      try {
+        Long l = q.spiderPoll();
+        System.out.println("the long value is " + l);
 
-		      System.out.println("pending messages: " + pendingMessages);
+        int pendingMessages = CrawlerMain.pendingMessage.incrementAndGet();
 
-//		      while (pendingMessages > 100) {
-//		    	  
-//		      }
+        System.out.println("pending messages: " + pendingMessages);
 
-		      dam.deref(l.longValue());
-		      if(CrawlerMain.pendingMessage.get()!=0){
-	        	  try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	          }
+        // while (pendingMessages > 100) {
+        //
+        // }
 
-		    } catch (Exception e) {
-		      e.printStackTrace();
-		    }
-	      //c.evaluateList();
-	    }
-	    System.out.println(
-	        "===================================== stopped ======================================");
-	
-}
+        dam.deref(l.longValue());
+
+        if (q.isEmpty() && pendingMessages > 0) {
+          synchronized (CrawlerMain.pendingMessage) {
+            try {
+              System.out.println("hello");
+              CrawlerMain.pendingMessage.wait();
+            } catch (InterruptedException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+          }
+
+        }
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      // c.evaluateList();
+      System.out.println("end loop");
+    }
+    System.out.println(
+        "===================================== stopped ======================================");
+
+  }
 }
