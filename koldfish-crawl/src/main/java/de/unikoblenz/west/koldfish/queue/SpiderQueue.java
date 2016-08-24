@@ -27,15 +27,15 @@ public class SpiderQueue {
   public void schedule(Frontier f) {
 
     Iterator<Long> it = f.iterator();
-    int i = 0;
+    //int i = 0;
     while (it.hasNext()) {
       Long l = it.next();
       if (!checkSeen(l)) {
         q.add(l);
 
       }
-      it.remove();
-      i++;
+     it.remove();
+      //i++;
     }
     // System.out.println(" the sizes are " + f.size() + " same as " + q.size());
   }

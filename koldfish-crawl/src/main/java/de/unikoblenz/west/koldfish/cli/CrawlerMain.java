@@ -20,7 +20,7 @@ import de.unikoblenz.west.koldfish.seen.Seen;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
 public class CrawlerMain  {
-  static AtomicInteger atomicInt = new AtomicInteger(0);
+  static AtomicInteger pendingMessage = new AtomicInteger(0);
 
   // public static volatile boolean keepProcessing= true;
   /**

@@ -29,7 +29,7 @@ public class Crawler implements Runnable {
       @Override
       public void onErrorResponse(ErrorResponse response) {
         if (_seen.remove(new Long(response.getEncodedDerefIri()))) {
-          CrawlerMain.atomicInt.decrementAndGet();
+          CrawlerMain.pendingMessage.decrementAndGet();
         }
 
         System.out.println("it has been removed because of the error response");
@@ -37,9 +37,9 @@ public class Crawler implements Runnable {
 
       @Override
       public void onDerefResponse(DerefResponse response) {
-        System.out.println(response.getEncodedDerefIri());
+        
         Iterator<long[]> it = response.iterator();
-
+        
         Frontier f2 = new BasicFrontier();
         CrawlerMain m = new CrawlerMain();
         // if(it!=null)
@@ -47,16 +47,25 @@ public class Crawler implements Runnable {
 
         while (it.hasNext()) {
           for (long value : it.next()) {
+//        	  System.out.println("the response is " + value);
             f2.add(new Long(value));
-
+        	  //System.out.println("the response is " + f2.getData());
           }
-
+          
           q.schedule(f2);
+          
         }
 
         if (_seen.hasBeenSeen(response.getEncodedDerefIri())) {
-          CrawlerMain.atomicInt.decrementAndGet();
+          CrawlerMain.pendingMessage.decrementAndGet();
         }
+          while(CrawlerMain.pendingMessage.get()==0){
+        	  dam.notifyAll();
+        	  System.out.println("++++++++++++++++++++++++++++i am notifying ++++++++++++");
+          }
+          
+          
+        
 
 
         System.out
@@ -98,20 +107,29 @@ public class Crawler implements Runnable {
 @Override
 public void run() {
 	// TODO Auto-generated method stub
-	 while ((CrawlerMain.atomicInt.get()) > 0 || !q.isEmpty()) {
+	 while ((CrawlerMain.pendingMessage.get()) > 0 || !q.isEmpty()) {
 	      // System.out.println("the queue size is " + q.queueSize());
 		 try {
 		      Long l = q.spiderPoll();
+		      System.out.println("the long value is " + l );
 
-		      int pendingMessages = CrawlerMain.atomicInt.incrementAndGet();
+		      int pendingMessages = CrawlerMain.pendingMessage.incrementAndGet();
 
 		      System.out.println("pending messages: " + pendingMessages);
 
-		      while (pendingMessages > 100) {
-		      }
+//		      while (pendingMessages > 100) {
+//		    	  
+//		      }
 
 		      dam.deref(l.longValue());
-
+		      if(CrawlerMain.pendingMessage.get()!=0){
+	        	  try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	          }
 
 		    } catch (Exception e) {
 		      e.printStackTrace();
