@@ -5,7 +5,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import de.unikoblenz.west.koldfish.frontier.Frontier;
-import de.unikoblenz.west.koldfish.seen.Seen;;
+import de.unikoblenz.west.koldfish.seen.Seen;
 
 public class SpiderQueue {
 
@@ -27,15 +27,15 @@ public class SpiderQueue {
   public void schedule(Frontier f) {
 
     Iterator<Long> it = f.iterator();
-    //int i = 0;
+    // int i = 0;
     while (it.hasNext()) {
       Long l = it.next();
       if (!checkSeen(l)) {
         q.add(l);
 
       }
-     it.remove();
-      //i++;
+      it.remove();
+      // i++;
     }
     // System.out.println(" the sizes are " + f.size() + " same as " + q.size());
   }
