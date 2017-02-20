@@ -19,7 +19,7 @@ import de.unikoblenz.west.koldfish.queue.SpiderQueue;
 import de.unikoblenz.west.koldfish.seen.Seen;
 import de.unikoblenz.west.koldfish.seen.Seen_Queue;
 
-public class CrawlerMain  {
+public class CrawlerMain {
   static AtomicInteger pendingMessage = new AtomicInteger(0);
 
   // public static volatile boolean keepProcessing= true;
@@ -67,7 +67,7 @@ public class CrawlerMain  {
     Scanner s = new Scanner(seedList);
 
     while (s.hasNextLine()) {
-      actual = dictionary.convertIris(Arrays.asList(s.nextLine()));
+      actual = dictionary.transformRDF(Arrays.asList(s.nextLine()));
     }
     s.close();
     Iterable<Long> seeds = actual;
@@ -79,13 +79,13 @@ public class CrawlerMain  {
 
     Seen _seen = new Seen_Queue();
     SpiderQueue q = new SpiderQueue(_seen);
-   
+
     Crawler c = new Crawler(q, frontier, _seen);
     q.schedule(frontier);
-    
-    Thread t =new Thread(c);
+
+    Thread t = new Thread(c);
     t.start();
-   
+
   }
 
 
@@ -118,5 +118,5 @@ public class CrawlerMain  {
     return null;
   }
 
- 
+
 }
